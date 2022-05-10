@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.code-edit-container {
+    position: relative;
+    height: 100%;
+    @apply bg-slate-600;
+}
+  
+.code-input,
+.code-output {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  border: none;
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  background: transparent;
+}
+
+.code-input {
+  opacity: 1;
+  margin: 0;
+  color: hsl(0, 0%, 40%);
+  resize: none;
+}
+
+.code-output {
+  pointer-events: none;
+  z-index: 3;
+  margin: 0;
+}
+code {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 1rem;
+  display: block;
+  color: hsl(0, 0%, 40%);
+  font-family: "PT Mono", monospace;
+}
+
+.tag:not(body) {
+  align-items: center;
+  background-color: transparent;
+  border-radius: 0;
+  display: initial;
+  font-size: 1em;
+  height: 2em;
+  justify-content: center;
+  line-height: inherit;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.number {
+  align-items: initial;
+  background-color: initial;
+  border-radius: initial;
+  display: initial;
+  font-size: 1rem;
+  height: initial;
+  justify-content: initial;
+  margin-right: initial;
+  min-width: initial;
+  padding: initial;
+  text-align: initial;
+  vertical-align: inherit;
+}
+
+/* overrides */
+.code-edit-container :not(pre) > code[class*="language-"],
+.code-edit-container pre[class*="language-"] {
+  background: transparent;
+  margin: 0;
+}
+code[class*="language-"], pre[class*="language-"] {
+  text-shadow: 0 1px rgb(71 85 105 / var(--tw-bg-opacity)) !important;
+}
+
+  
+  
