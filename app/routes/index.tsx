@@ -24,7 +24,8 @@ export default function Index() {
           </button>
         </div>
         <div className={`
-        ${fetcher?.data?.error && 'flex justify-center items-center drop-shadow-xl animate-pulse text-center'}
+        ${fetcher?.data?.error && 'flex justify-center items-center animate-pulse text-center drop-shadow-[0_0_15px_rgb(251,113,133)]'}
+        ${fetcher?.data && !fetcher?.data?.error && `drop-shadow-[0_0_15px_#5eead4]`}
         h-full flex-1  rounded-xl overflow-scroll p-4 bg-slate-800 px-8
       `}>
           {

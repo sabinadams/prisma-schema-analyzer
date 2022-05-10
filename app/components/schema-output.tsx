@@ -7,9 +7,6 @@ interface props {
 export const SchemaOutput = ({ dmmf }: props) => {
     return <ObjectInspector
         data={dmmf}
-        expandPaths={[
-            'datamodel.models'
-        ]}
         theme={{
             ...chromeDark,
             BASE_BACKGROUND_COLOR: '#1E293B',
