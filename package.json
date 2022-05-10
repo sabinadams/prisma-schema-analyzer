@@ -25,6 +25,7 @@
     "react-syntax-highlighter": "^15.5.0"
   },
   "devDependencies": {
+    "@architect/architect": "^10.3.2",
     "@remix-run/dev": "^1.4.3",
     "@remix-run/eslint-config": "^1.4.3",
     "@remix-run/serve": "^1.4.3",
