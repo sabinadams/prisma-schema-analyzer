@@ -11,5 +11,4 @@ module.exports = {
   assetsBuildDirectory: "public/build",
   publicPath: "/_static/build/",
   serverBuildTarget: "arc",
-  serverDependenciesToBundle: ["@prisma/sdk", "@prisma/engines"],
 };
