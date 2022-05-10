@@ -4,7 +4,7 @@ prisma-schema-analyzer-remix
 @http
 /*
   method any
-  src api
+  src server
 
 
 @aws
