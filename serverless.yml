@@ -8,7 +8,7 @@ package:
     - "!node_modules/@prisma/engines"
     - "!node_modules/prisma"
     - "!node_modules/.prisma/**/libquery_engine-*"
-    - "node_modules/.prisma/**/libquery_engine-rhel-openssl-1.0.x.so.node"
+    - "node_modules/@prisma/engines/prisma-fmt-rhel-openssl-1.0.x"
 
 plugins:
   - serverless-esbuild
