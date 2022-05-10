@@ -12,5 +12,5 @@ module.exports = {
   // assetsBuildDirectory: "public/build",
   // serverBuildPath: "api/index.js",
   // publicPath: "/build/",
-  serverDependenciesToBundle: ["@prisma/engines"],
+  serverDependenciesToBundle: ["@prisma/engines", "@prisma/sdk"],
 };
