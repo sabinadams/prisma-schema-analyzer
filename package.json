@@ -11,11 +11,13 @@
     "dev:css": "tailwindcss -w -i ./styles/app.css -o app/styles/app.css"
   },
   "dependencies": {
+    "@prisma/engines": "^3.15.0-1.40300bb9a78949ed2d23316cd82e0bc719cdc167",
     "@prisma/sdk": "^3.13.0",
     "@remix-run/node": "^1.4.3",
     "@remix-run/react": "^1.4.3",
     "@remix-run/vercel": "^1.4.3",
     "@vercel/node": "^1.14.0",
+    "prisma": "^3.14.0",
     "prismjs": "^1.28.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
