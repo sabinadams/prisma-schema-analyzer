@@ -58,7 +58,7 @@ export const SchemaForm = ({ fetcher }: props) => {
                 ref={textarea}
                 name="schema-display"
                 className="code-input overflow-scroll p-2 focus:outline-none whitespace-nowrap placeholder-teal-300 caret-teal-300"
-                placeholder="Paste schema here..."
+                placeholder="Paste your schema here..."
                 onChange={(evt) => setUnformatted(evt.target.value)}
                 onKeyDown={handleKeyDown}
                 value={unformatted}
