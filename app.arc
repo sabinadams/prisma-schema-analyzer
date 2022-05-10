@@ -2,7 +2,10 @@
 prisma-schema-analyzer-remix
 
 @http
-get /
+/*
+  method any
+  src server
+
 
 @aws
 # profile default
