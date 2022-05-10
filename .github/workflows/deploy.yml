@@ -48,17 +48,11 @@ jobs:
           serverless plugin install -n serverless-esbuild
           serverless plugin install -n serverless-s3-sync
 
-      - name: 🚀 Staging Deploy
-        if: github.ref == 'refs/heads/dev'
-        run: sls deploy
-        env:
-          CI: true
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
       - name: 🚀 Production Deploy
         if: github.ref == 'refs/heads/master'
-        run: sls deploy
+        run: |
+          sls deploy --verbose
+          sls info --verbose
         env:
           CI: true
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
