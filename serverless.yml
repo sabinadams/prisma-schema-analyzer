@@ -1,3 +1,5 @@
+org: sabinadams
+app: prisma-analyzer
 service: "remix-serverless-app"
 
 frameworkVersion: "3"
@@ -16,8 +18,8 @@ plugins:
 
 custom:
   # stage-specific variables
-  # dev:
-  #   HOST: my-cloudfront-domain.cloudfront.net # replace with the WebsiteDomain from stack outputs
+  dev:
+    HOST: dgys6qahspaec.cloudfront.net # replace with the WebsiteDomain from stack outputs
   # prod:
   #   HOST: my-domain.com # replace with your production url
   # serverless-esbuild config, bundles your code and allows you to use typescript or es-next features in your handler code
@@ -150,9 +152,9 @@ resources:
                     - ".execute-api.${self:provider.region}.amazonaws.com"
               Id: RemixOrigin
               # UNCOMMENT THIS TO SET THE X-Forwarded-Host header for API Gateway
-              # OriginCustomHeaders:
-              #   - HeaderName: X-Forwarded-Host
-              #     HeaderValue: ${self:${self:provider.stage}.HOST}
+              OriginCustomHeaders:
+                - HeaderName: X-Forwarded-Host
+                  HeaderValue: ${self:custom.${self:provider.stage}.HOST}
               CustomOriginConfig:
                 OriginProtocolPolicy: https-only
                 OriginSSLProtocols: [TLSv1.2]

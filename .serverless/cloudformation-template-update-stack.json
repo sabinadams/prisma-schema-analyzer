@@ -154,6 +154,52 @@
         }
       }
     },
+    "EnterpriseLogAccessIamRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::802587217904:root"
+              },
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": "ServerlessEnterprise-bf867972-8bae-4d6b-95b5-7fc35811f3f8"
+                }
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "LogFilterAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:FilterLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "RemixLogGroup",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
     "RemixLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -161,9 +207,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/remix-serverless-app/dev/1652221864886-2022-05-10T22:31:04.886Z/remix.zip"
+          "S3Key": "serverless/remix-serverless-app/dev/1652226325114-2022-05-10T23:45:25.114Z/remix.zip"
         },
-        "Handler": "server/index.handler",
+        "Handler": "s_remix.handler",
         "Runtime": "nodejs14.x",
         "FunctionName": "remix-serverless-app-dev-remix",
         "MemorySize": 1024,
@@ -186,14 +232,14 @@
         "RemixLogGroup"
       ]
     },
-    "RemixLambdaVersionu5j8wurmwOk50wAhR95c1PSGEhbx4EFOC8TqdlMtJY": {
+    "RemixLambdaVersioneS2wONtyxB4CQKrZ8MxWYickHP8TmRjlEWy03Tmtm9E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RemixLambdaFunction"
         },
-        "CodeSha256": "SOPunFGSMie9DUxUFVZdTR5HUg9HKnJnuqNnLYuIgpo=",
+        "CodeSha256": "dTP+gOGTNDrzHhBeOgyzhQ39wx+PeNXfPMssbGEkYx8=",
         "Description": "My Remix app!"
       }
     },
@@ -202,6 +248,12 @@
       "Properties": {
         "Name": "dev-remix-serverless-app",
         "ProtocolType": "HTTP"
+      }
+    },
+    "HttpApiLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/http-api/remix-serverless-app-dev"
       }
     },
     "HttpApiStage": {
@@ -214,8 +266,18 @@
         "AutoDeploy": true,
         "DefaultRouteSettings": {
           "DetailedMetricsEnabled": false
+        },
+        "AccessLogSettings": {
+          "DestinationArn": {
+            "Fn::GetAtt": [
+              "HttpApiLogGroup",
+              "Arn"
+            ]
+          },
+          "Format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourcePath\":\"$context.routeKey\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"stage\":\"$context.stage\",\"status\":\"$context.status\",\"integrationStatus\":\"$context.integrationStatus\",\"integrationLatency\":\"$context.integrationLatency\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_HTTP_API_LOG\",\"version\":\"1.0.0\"}"
         }
-      }
+      },
+      "DependsOn": "HttpApiLogGroup"
     },
     "RemixLambdaPermissionHttpApi": {
       "Type": "AWS::Lambda::Permission",
@@ -494,6 +556,26 @@
           }
         }
       }
+    },
+    "CWLSubFilterRemixLogGroupUsEast1": {
+      "Type": "AWS::Logs::SubscriptionFilter",
+      "Properties": {
+        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:bf867972-8bae-4d6b-95b5-7fc35811f3f8#0L2HNJWcmgBlDvj8RD#remix-serverless-app#dev",
+        "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
+        "LogGroupName": {
+          "Ref": "RemixLogGroup"
+        }
+      }
+    },
+    "CWLSubFilterHttpApiLogGroupUsEast1": {
+      "Type": "AWS::Logs::SubscriptionFilter",
+      "Properties": {
+        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:bf867972-8bae-4d6b-95b5-7fc35811f3f8#0L2HNJWcmgBlDvj8RD#remix-serverless-app#dev",
+        "FilterPattern": "\"SLS_HTTP_API_LOG\"",
+        "LogGroupName": {
+          "Ref": "HttpApiLogGroup"
+        }
+      }
     }
   },
   "Outputs": {
@@ -505,10 +587,21 @@
         "Name": "sls-remix-serverless-app-dev-ServerlessDeploymentBucketName"
       }
     },
+    "EnterpriseLogAccessIamRole": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EnterpriseLogAccessIamRole",
+          "Arn"
+        ]
+      },
+      "Export": {
+        "Name": "sls-remix-serverless-app-dev-EnterpriseLogAccessIamRole"
+      }
+    },
     "RemixLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RemixLambdaVersionu5j8wurmwOk50wAhR95c1PSGEhbx4EFOC8TqdlMtJY"
+        "Ref": "RemixLambdaVersioneS2wONtyxB4CQKrZ8MxWYickHP8TmRjlEWy03Tmtm9E"
       },
       "Export": {
         "Name": "sls-remix-serverless-app-dev-RemixLambdaFunctionQualifiedArn"
