@@ -1,5 +1,3 @@
-org: sabinadams
-app: prisma-analyzer
 service: "remix-serverless-app"
 
 frameworkVersion: "3"
