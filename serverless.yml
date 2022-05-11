@@ -54,16 +54,9 @@ provider:
     NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000"
   lambdaHashingVersion: "20201221"
 
-layers:
-  prisma:
-    path: .engine-layer
-    description: "Layer for Prisma Engine"
-
 functions:
   remix:
     handler: server/index.handler
-    layers:
-      - { Ref: PrismaLambdaLayer }
     description: My Remix app!
     environment:
       PRISMA_FMT_BINARY: "node_modules/@prisma/engines/prisma-fmt-rhel-openssl-1.0.x"
