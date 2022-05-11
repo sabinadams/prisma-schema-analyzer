@@ -1,4 +1,7 @@
-import { createRequestHandler } from "@remix-run/vercel";
+import { createRequestHandler } from "@remix-run/architect";
 import * as build from "@remix-run/dev/server-build";
 
-export default createRequestHandler({ build, mode: process.env.NODE_ENV });
+export const handler = createRequestHandler({
+  build,
+  mode: process.env.NODE_ENV,
+});

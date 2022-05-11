@@ -50,6 +50,9 @@ jobs:
           serverless plugin install -n serverless-esbuild
           serverless plugin install -n serverless-s3-sync
 
+      - name: Serverless AWS authentication
+        run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
+
       - name: serverless deploy
         uses: serverless/github-action@v3
         with:
