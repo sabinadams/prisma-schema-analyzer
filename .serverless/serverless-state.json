@@ -217,6 +217,19 @@
               ]
             }
           },
+          "PrismaLambdaLayer": {
+            "Type": "AWS::Lambda::LayerVersion",
+            "Properties": {
+              "Content": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/remix-serverless-app/dev/1652287760892-2022-05-11T16:49:20.892Z/prisma.zip"
+              },
+              "LayerName": "prisma",
+              "Description": "Layer for Prisma Engine"
+            }
+          },
           "RemixLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -224,7 +237,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/remix-serverless-app/dev/1652226325114-2022-05-10T23:45:25.114Z/remix.zip"
+                "S3Key": "serverless/remix-serverless-app/dev/1652288840911-2022-05-11T17:07:20.911Z/remix.zip"
               },
               "Handler": "s_remix.handler",
               "Runtime": "nodejs14.x",
@@ -235,7 +248,9 @@
               "Environment": {
                 "Variables": {
                   "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
-                  "NODE_OPTIONS": "--enable-source-maps --stack-trace-limit=1000"
+                  "NODE_OPTIONS": "--enable-source-maps --stack-trace-limit=1000",
+                  "PRISMA_FMT_BINARY": "node_modules/@prisma/engines/prisma-fmt-rhel-openssl-1.0.x",
+                  "TABLE_NAME": "tableName1"
                 }
               },
               "Role": {
@@ -243,20 +258,25 @@
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              }
+              },
+              "Layers": [
+                {
+                  "Ref": "PrismaLambdaLayer"
+                }
+              ]
             },
             "DependsOn": [
               "RemixLogGroup"
             ]
           },
-          "RemixLambdaVersioneS2wONtyxB4CQKrZ8MxWYickHP8TmRjlEWy03Tmtm9E": {
+          "RemixLambdaVersionTfxLqDehZF5UEhDiYvyxAa1aIiibh2ItRvTlm8ti6E": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RemixLambdaFunction"
               },
-              "CodeSha256": "dTP+gOGTNDrzHhBeOgyzhQ39wx+PeNXfPMssbGEkYx8=",
+              "CodeSha256": "hI1g6zXuhVB56h5VHJ4Yt3EiMrtUsomfGiwKIqgYeac=",
               "Description": "My Remix app!"
             }
           },
@@ -489,6 +509,12 @@
                       ]
                     },
                     "Id": "RemixOrigin",
+                    "OriginCustomHeaders": [
+                      {
+                        "HeaderName": "X-Forwarded-Host",
+                        "HeaderValue": "dgys6qahspaec.cloudfront.net"
+                      }
+                    ],
                     "CustomOriginConfig": {
                       "OriginProtocolPolicy": "https-only",
                       "OriginSSLProtocols": [
@@ -521,7 +547,7 @@
                 },
                 "CacheBehaviors": [
                   {
-                    "PathPattern": "static/*",
+                    "PathPattern": "_static/*",
                     "AllowedMethods": [
                       "GET",
                       "HEAD"
@@ -553,6 +579,26 @@
                     "Compress": false,
                     "ForwardedValues": {
                       "QueryString": false,
+                      "Cookies": {
+                        "Forward": "none"
+                      }
+                    },
+                    "TargetOriginId": "StaticOrigin",
+                    "ViewerProtocolPolicy": "redirect-to-https"
+                  },
+                  {
+                    "PathPattern": "/prism-duotone-sea.css",
+                    "AllowedMethods": [
+                      "GET",
+                      "HEAD"
+                    ],
+                    "CachedMethods": [
+                      "GET",
+                      "HEAD"
+                    ],
+                    "Compress": true,
+                    "ForwardedValues": {
+                      "QueryString": true,
                       "Cookies": {
                         "Forward": "none"
                       }
@@ -612,10 +658,33 @@
               "Name": "sls-remix-serverless-app-dev-EnterpriseLogAccessIamRole"
             }
           },
+          "PrismaLambdaLayerQualifiedArn": {
+            "Description": "Current Lambda layer version",
+            "Value": {
+              "Ref": "PrismaLambdaLayer"
+            },
+            "Export": {
+              "Name": "sls-remix-serverless-app-dev-PrismaLambdaLayerQualifiedArn"
+            }
+          },
+          "PrismaLambdaLayerHash": {
+            "Description": "Current Lambda layer hash",
+            "Value": "e50cbb33b1a7c86761183889b5324f00c2b656af",
+            "Export": {
+              "Name": "sls-remix-serverless-app-dev-PrismaLambdaLayerHash"
+            }
+          },
+          "PrismaLambdaLayerS3Key": {
+            "Description": "Current Lambda layer S3Key",
+            "Value": "serverless/remix-serverless-app/dev/1652287760892-2022-05-11T16:49:20.892Z/prisma.zip",
+            "Export": {
+              "Name": "sls-remix-serverless-app-dev-PrismaLambdaLayerS3Key"
+            }
+          },
           "RemixLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RemixLambdaVersioneS2wONtyxB4CQKrZ8MxWYickHP8TmRjlEWy03Tmtm9E"
+              "Ref": "RemixLambdaVersionTfxLqDehZF5UEhDiYvyxAa1aIiibh2ItRvTlm8ti6E"
             },
             "Export": {
               "Name": "sls-remix-serverless-app-dev-RemixLambdaFunctionQualifiedArn"
@@ -765,6 +834,9 @@
       "vpc": {}
     },
     "custom": {
+      "dev": {
+        "HOST": "dgys6qahspaec.cloudfront.net"
+      },
       "esbuild": {
         "bundle": true,
         "minify": false,
@@ -792,7 +864,12 @@
                 }
               },
               {
-                "static/**/*": {
+                "prism-duotone-sea.css": {
+                  "CacheControl": "public, max-age=3600"
+                }
+              },
+              {
+                "_static/**/*": {
                   "CacheControl": "public, max-age=31536000, immutable"
                 }
               }
@@ -809,7 +886,14 @@
     "functions": {
       "remix": {
         "handler": "s_remix.handler",
+        "layers": {
+          "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"RemixLambdaFunction\"][\"Properties\"][\"Layers\"]"
+        },
         "description": "My Remix app!",
+        "environment": {
+          "PRISMA_FMT_BINARY": "node_modules/@prisma/engines/prisma-fmt-rhel-openssl-1.0.x",
+          "TABLE_NAME": "tableName1"
+        },
         "events": [
           {
             "httpApi": {
@@ -828,7 +912,7 @@
         "timeout": 6,
         "runtime": "nodejs14.x",
         "vpc": {},
-        "versionLogicalId": "RemixLambdaVersioneS2wONtyxB4CQKrZ8MxWYickHP8TmRjlEWy03Tmtm9E"
+        "versionLogicalId": "RemixLambdaVersionTfxLqDehZF5UEhDiYvyxAa1aIiibh2ItRvTlm8ti6E"
       }
     },
     "resources": {
@@ -954,6 +1038,12 @@
                     ]
                   },
                   "Id": "RemixOrigin",
+                  "OriginCustomHeaders": [
+                    {
+                      "HeaderName": "X-Forwarded-Host",
+                      "HeaderValue": "dgys6qahspaec.cloudfront.net"
+                    }
+                  ],
                   "CustomOriginConfig": {
                     "OriginProtocolPolicy": "https-only",
                     "OriginSSLProtocols": [
@@ -986,7 +1076,7 @@
               },
               "CacheBehaviors": [
                 {
-                  "PathPattern": "static/*",
+                  "PathPattern": "_static/*",
                   "AllowedMethods": [
                     "GET",
                     "HEAD"
@@ -1018,6 +1108,26 @@
                   "Compress": false,
                   "ForwardedValues": {
                     "QueryString": false,
+                    "Cookies": {
+                      "Forward": "none"
+                    }
+                  },
+                  "TargetOriginId": "StaticOrigin",
+                  "ViewerProtocolPolicy": "redirect-to-https"
+                },
+                {
+                  "PathPattern": "/prism-duotone-sea.css",
+                  "AllowedMethods": [
+                    "GET",
+                    "HEAD"
+                  ],
+                  "CachedMethods": [
+                    "GET",
+                    "HEAD"
+                  ],
+                  "Compress": true,
+                  "ForwardedValues": {
+                    "QueryString": true,
                     "Cookies": {
                       "Forward": "none"
                     }
@@ -1084,6 +1194,16 @@
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
+      "layers": {
+        "prisma": {
+          "path": ".engine-layer",
+          "description": "Layer for Prisma Engine",
+          "package": {
+            "artifact": "/Users/sabinadams/Documents/projects/prisma-schema-analyzer-remix/.serverless/prisma.zip"
+          },
+          "artifactAlreadyUploaded": true
+        }
+      },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       },
@@ -1093,7 +1213,9 @@
     },
     "app": "prisma-analyzer",
     "org": "sabinadams",
-    "layers": {},
+    "layers": {
+      "$ref": "$[\"service\"][\"initialServerlessConfig\"][\"layers\"]"
+    },
     "isDashboardMonitoringPreconfigured": true,
     "isDashboardAppPreconfigured": true,
     "orgUid": "bf867972-8bae-4d6b-95b5-7fc35811f3f8",
@@ -1101,7 +1223,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/remix-serverless-app/dev/1652226325114-2022-05-10T23:45:25.114Z",
+    "artifactDirectoryName": "serverless/remix-serverless-app/dev/1652288840911-2022-05-11T17:07:20.911Z",
     "artifact": ""
   }
 }

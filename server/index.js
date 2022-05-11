@@ -46,14 +46,14 @@ var __toCommonJS = /* @__PURE__ */ ((cache) => {
 // server.js
 var server_exports = {};
 __export(server_exports, {
-  default: () => server_default
+  handler: () => handler
 });
 
 // node_modules/@remix-run/dev/compiler/shims/react.ts
 var React = __toESM(require("react"));
 
 // server.js
-var import_vercel = require("@remix-run/vercel");
+var import_architect = require("@remix-run/architect");
 
 // server-entry-module:@remix-run/dev/server-build
 var server_build_exports = {};
@@ -294,7 +294,12 @@ var routes = {
 };
 
 // server.js
-var server_default = (0, import_vercel.createRequestHandler)({ build: server_build_exports, mode: "production" });
+var handler = (0, import_architect.createRequestHandler)({
+  build: server_build_exports,
+  mode: "production"
+});
 module.exports = __toCommonJS(server_exports);
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {});
+0 && (module.exports = {
+  handler
+});
