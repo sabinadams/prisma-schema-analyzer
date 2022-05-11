@@ -5,14 +5,15 @@ frameworkVersion: "3"
 package:
   individually: true
   patterns:
-    - "!node_modules/@prisma/engines"
+    - "!@prisma/engines"
     - "!node_modules/prisma"
     - "!node_modules/.prisma/**/libquery_engine-*"
-    - "node_modules/@prisma/engines/prisma-fmt-rhel-openssl-1.0.x"
+    - "@prisma/engines/prisma-fmt-rhel-openssl-1.0.x"
 
 plugins:
   - serverless-esbuild
   - serverless-s3-sync
+  - serverless-scriptable-plugin
 
 custom:
   # stage-specific variables
@@ -21,6 +22,9 @@ custom:
   # prod:
   #   HOST: my-domain.com # replace with your production url
   # serverless-esbuild config, bundles your code and allows you to use typescript or es-next features in your handler code
+  scriptable:
+    hooks:
+      "package:initialize": "sh ./ci/create-engine-layer.sh"
   esbuild:
     bundle: true
     minify: false
@@ -54,13 +58,26 @@ provider:
     NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000"
   lambdaHashingVersion: "20201221"
 
+layers:
+  prisma:
+    path: .engine-layer
+    description: "Layer for Prisma Engine"
+    package:
+      patterns:
+        - "!nodejs/@prisma/**/*"
+        - "nodejs/@prisma/engines/prisma-fmt-rhel-openssl-1.0.x"
+        - "nodejs/@prisma/engines/libquery_engine-rhel-openssl-1.0.x.so.node"
+
 functions:
   remix:
     handler: server/index.handler
+    layers:
+      - { Ref: PrismaLambdaLayer }
     description: My Remix app!
     environment:
-      PRISMA_FMT_BINARY: "node_modules/@prisma/engines/prisma-fmt-rhel-openssl-1.0.x"
-      TABLE_NAME: tableName1
+      PRISMA_FMT_BINARY: "/opt/nodejs/@prisma/engines/prisma-fmt-rhel-openssl-1.0.x"
+      PRISMA_QUERY_ENGINE_BINARY: "/opt/nodejs/@prisma/engines/libquery_engine-rhel-openssl-1.0.x.so.node"
+      PRISMA_QUERY_ENGINE_LIBRARY: "/opt/nodejs/@prisma/engines/libquery_engine-rhel-openssl-1.0.x.so.node"
     events:
       - httpApi:
           method: any

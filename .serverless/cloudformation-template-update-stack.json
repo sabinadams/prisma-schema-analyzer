@@ -154,6 +154,19 @@
         }
       }
     },
+    "PrismaLambdaLayer": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/remix-serverless-app/dev/1652297675942-2022-05-11T19:34:35.942Z/prisma.zip"
+        },
+        "LayerName": "prisma",
+        "Description": "Layer for Prisma Engine"
+      }
+    },
     "RemixLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -161,7 +174,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/remix-serverless-app/dev/1652292667267-2022-05-11T18:11:07.267Z/remix.zip"
+          "S3Key": "serverless/remix-serverless-app/dev/1652298103914-2022-05-11T19:41:43.914Z/remix.zip"
         },
         "Handler": "server/index.handler",
         "Runtime": "nodejs14.x",
@@ -173,8 +186,9 @@
           "Variables": {
             "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
             "NODE_OPTIONS": "--enable-source-maps --stack-trace-limit=1000",
-            "PRISMA_FMT_BINARY": "node_modules/@prisma/engines/prisma-fmt-rhel-openssl-1.0.x",
-            "TABLE_NAME": "tableName1"
+            "PRISMA_FMT_BINARY": "/opt/nodejs/@prisma/engines/prisma-fmt-rhel-openssl-1.0.x",
+            "PRISMA_QUERY_ENGINE_BINARY": "/opt/nodejs/@prisma/engines/libquery_engine-rhel-openssl-1.0.x.so.node",
+            "PRISMA_QUERY_ENGINE_LIBRARY": "/opt/nodejs/@prisma/engines/libquery_engine-rhel-openssl-1.0.x.so.node"
           }
         },
         "Role": {
@@ -193,7 +207,7 @@
         "RemixLogGroup"
       ]
     },
-    "RemixLambdaVersionKKeBOTPQiCUZKUUpVymwi3f2Owx5jeGCihikpMq3g": {
+    "RemixLambdaVersionnvwS8yBjk48oVPoCNhXJujnI1QyvSp0xfrTGo2MAI": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -538,10 +552,33 @@
         "Name": "sls-remix-serverless-app-dev-ServerlessDeploymentBucketName"
       }
     },
+    "PrismaLambdaLayerQualifiedArn": {
+      "Description": "Current Lambda layer version",
+      "Value": {
+        "Ref": "PrismaLambdaLayer"
+      },
+      "Export": {
+        "Name": "sls-remix-serverless-app-dev-PrismaLambdaLayerQualifiedArn"
+      }
+    },
+    "PrismaLambdaLayerHash": {
+      "Description": "Current Lambda layer hash",
+      "Value": "e5444bf4a4088968f8a5d84875af09f22eb185f8",
+      "Export": {
+        "Name": "sls-remix-serverless-app-dev-PrismaLambdaLayerHash"
+      }
+    },
+    "PrismaLambdaLayerS3Key": {
+      "Description": "Current Lambda layer S3Key",
+      "Value": "serverless/remix-serverless-app/dev/1652297675942-2022-05-11T19:34:35.942Z/prisma.zip",
+      "Export": {
+        "Name": "sls-remix-serverless-app-dev-PrismaLambdaLayerS3Key"
+      }
+    },
     "RemixLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RemixLambdaVersionKKeBOTPQiCUZKUUpVymwi3f2Owx5jeGCihikpMq3g"
+        "Ref": "RemixLambdaVersionnvwS8yBjk48oVPoCNhXJujnI1QyvSp0xfrTGo2MAI"
       },
       "Export": {
         "Name": "sls-remix-serverless-app-dev-RemixLambdaFunctionQualifiedArn"
